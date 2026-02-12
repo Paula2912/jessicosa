@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Valentine's Adventure v2</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="game-container">
+        <div id="game-background"></div>
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- HUD (Always visible in game) -->
+        <div id="hud" class="hidden">
+            <div class="hud-item">❤️ <span id="lives-display">3</span></div>
+            <div class="hud-item">💎 <span id="hearts-display">0</span></div>
+            <div id="level-name-display">Nivel 1</div>
+        </div>
+
+        <!-- UI Overlay -->
+        <div id="ui-layer">
+            <div id="start-screen" class="screen active">
+                <h1>LA GRAN AVENTURA</h1>
+                <p>¡Elige a tu héroe!</p>
+                <div class="char-select">
+                    <div class="char-option" id="select-char-a">
+                        <div class="preview-box" id="preview-a"></div>
+                        <span>LIMONCIN</span>
+                    </div>
+                    <div class="char-option" id="select-char-b">
+                        <div class="preview-box" id="preview-b"></div>
+                        <span>JESSICOSA</span>
+                    </div>
+                </div>
+                <button id="start-btn">COMENZAR MISIÓN</button>
+                <div style="margin-top: 15px;">
+                    <button id="info-btn" style="background: #CDDC39; color: #333; font-size: 10px; padding: 10px;">ℹ️
+                        INFO & CURIOSIDADES</button>
+                </div>
+            </div>
+
+
+
+            <div id="game-over-screen" class="screen hidden">
+                <h1>¡Oh no!</h1>
+                <p>Inténtalo de nuevo, el amor todo lo puede.</p>
+                <button id="restart-btn">REINTENTAR</button>
+            </div>
+
+            <div id="win-screen" class="screen hidden">
+                <h1>¡ENCONTRADA!</h1>
+                <div id="pass-level-msg">Próximo destino: <span id="next-dest">...</span></div>
+                <button id="next-level-btn">VIAJAR ❤️</button>
+            </div>
+
+            <!-- Mobile Controls -->
+            <div id="mobile-controls" class="hidden">
+                <div class="d-pad">
+                    <button id="btn-left">⬅️</button>
+                    <button id="btn-right">➡️</button>
+                </div>
+                <div class="action-btn">
+                    <button id="btn-jump">🦘</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Photo Slideshow Overlay (Final) -->
+        <div id="slideshow-overlay" class="hidden">
+            <div class="slideshow-content">
+                <img id="slide-img" src="" alt="Recuerdo">
+                <p id="slide-caption">❤️</p>
+                <button id="close-slideshow">X</button>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- FULL SCREEN INFO PAGE (Overlay) -->
+    <div id="info-modal" class="hidden"
+        style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px; box-sizing: border-box; overflow-y: auto;">
+
+        <div
+            style="max-width: 600px; background: rgba(0,0,0,0.5); padding: 40px; border-radius: 20px; border: 2px solid #E91E63; box-shadow: 0 0 50px rgba(233, 30, 99, 0.3);">
+            <h2
+                style="color: #E91E63; font-family: 'Press Start 2P', cursive; font-size: 24px; margin-bottom: 30px; line-height: 1.5;">
+                💘 PROYECTO SECRETITO 💘</h2>
+
+            <p style="font-family: sans-serif; font-size: 18px; line-height: 1.6; margin-bottom: 20px;">
+                Este juego ha sido programado con <b>muchísimo amor</b> (y algo de café) solo para ti.
+            </p>
+            <p style="font-family: sans-serif; font-size: 18px; line-height: 1.6; margin-bottom: 30px;">
+                Sé que es una chorradita, pero me hacía ilusión regalarte algo que <b>nadie más tiene en el mundo</b>.
+                🌍✨
+            </p>
+
+            <div
+                style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; margin: 30px 0; text-align: left;">
+                <h3
+                    style="color: #CDDC39; font-family: 'Press Start 2P', cursive; font-size: 14px; margin-bottom: 20px; text-align: center;">
+                    🎭 REPARTO ESTELAR:</h3>
+                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <span style="font-size: 24px; margin-right: 15px;">🐧</span>
+                    <div>
+                        <strong style="color: #FF9800;">PINGU</strong>
+                        <div style="font-size: 12px; opacity: 0.8;">Experto en deslizarse y lanzar amor.</div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <span style="font-size: 24px; margin-right: 15px;">🐱</span>
+                    <div>
+                        <strong style="color: #d7ccc8;">DOBBY</strong>
+                        <div style="font-size: 12px; opacity: 0.8;">Maestra del disfraz (y de ser adorable).</div>
+                    </div>
+                </div>
+                <p style="font-size: 11px; font-style: italic; color: #aaa; text-align: center; margin-top: 15px;">
+                    (Cualquier parecido con la realidad es... absolutamente intencional 😜)</p>
+            </div>
+
+            <h3 style="color: #E91E63; font-family: 'Press Start 2P', cursive; font-size: 20px; margin: 30px 0;">¡TE
+                AMO! ❤️</h3>
+
+            <button id="close-info-btn"
+                style="background: #E91E63; color: white; border: none; padding: 15px 30px; font-family: 'Press Start 2P', cursive; cursor: pointer; border-radius: 5px; font-size: 14px;">VOLVER
+                AL JUEGO</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="sprites_v2.js"></script>
+    <script src="game_v2.js"></script>
+</body>
+
+</html>
